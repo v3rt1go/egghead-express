@@ -1,0 +1,11 @@
+{
+  "name": "egghead-express",
+  "version": "1.0.0",
+  "description": "simple express app from egghead.io",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC"
+}
