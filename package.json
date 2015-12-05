@@ -10,7 +10,11 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "body-parser": "^1.14.1",
+    "consolidate": "^0.13.1",
     "express": "^4.13.3",
+    "handlebars": "^4.0.5",
+    "jade": "^1.11.0",
     "lodash": "^3.10.1"
   },
   "devDependencies": {

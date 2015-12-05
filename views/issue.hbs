@@ -1,0 +1,77 @@
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width">
+    <title>View issue details</title>
+  </head>
+  <body>
+    <p>
+      <a href="/">&laquo; Back to issues list</a>
+    </p>
+    <h1>{{title}}</h1>
+    <div class="view">
+      <p>URL: <a href="{{url}}" target="_blank">{{url}}</a></p>
+      <p>STATE: {{state}}</p>
+      <p>Created: {{created_at}}</p>
+      <p>Updated: {{updated_at}}</p>
+      <p>Assigned To: {{user}}</p>
+    </div>
+    <div class="edit" style="display: none;">
+      <p>URL: <a href="{{url}}" target="_blank">{{url}}</a></p>
+      <p><input id="state" type="text" name="state" value={{state}}></p>
+      <p>Created: {{created_at}}</p>
+      <p>Updated: {{updated_at}}</p>
+      <p><input id="user" type="text" name="user" value={{user}}></p>
+      <p>
+        <input type="submit" value="Save" onclick="save()" /> 
+        <input type="submit" value="Cancel" onclick="cancel()" />
+      </p>
+    </div>
+    <p>
+      <a href="#" onclick="edit()">Edit</a> | 
+      <a href="#" onclick="del()">Delete</a>
+    </p>
+    <img src="/images/{{id}}-gh.png" alt="{{title}}" />
+    <div>
+      <p>{{content}}</p>
+    </div>
+
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+    <script>
+      function edit() {
+        $('.edit').show();
+        $('.view').hide();
+      }
+
+      function cancel() {
+        $('.edit').hide();
+        $('.view').show();
+      }
+      
+      function save() {
+        console.log('Save triggered');
+        $.ajax('/issues/'+{{id}}, {
+          method: 'PUT',
+          data: {
+            state: $('#state').val(),
+            updated_at: Date.now(),
+            user: $('#user').val()
+          },
+          complete: function() {
+            cancel();
+            location.reload();
+          }
+        });
+      }
+
+      function del() {
+        $.ajax('/issues/'+{{id}}, {
+          method: 'DELETE',
+          complete: function() {
+            location: '/' 
+          }
+        });
+      }
+    </script>
+  </body>
+</html>

@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width">
+    <title>Handlebars Template</title>
+  </head>
+  <body>
+    <h1>Handlebars!</h1>
+    {{#each issues as |issue|}}
+      <div>
+        <img src="/images/{{issue.id}}-gh.png" alt="{{issue.title}}" width="50" heigh="50" />
+        <a href="/issues/{{issue.id}}" target="_blank">{{issue.title}}</a>
+      </div>
+    {{/each}}
+  </body>
+</html>

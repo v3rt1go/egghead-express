@@ -1,0 +1,11 @@
+doctype html
+html(lang="en")
+	head
+		title= "User Index"
+	body
+		h1 Jade!
+		ul
+			each issue in issues
+				li
+					a(href='/issues/' + issue.id target="_blank")= issue.title
+			
