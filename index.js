@@ -1,16 +1,18 @@
 'use strict';
 
 var express = require('express');
-var fs = require('fs');
+var jsonfile = require('jsonfile');
 var _ = require('lodash');
 var engines = require('consolidate');
 var bodyParser = require('body-parser');
 
 var issues = [];
-fs.readFile('issues.json', {encoding: 'utf8'}, function (err, data) {
+var issueStore = [];
+jsonfile.readFile('issues.json', function (err, data) {
   if (err) throw err;
 
-  JSON.parse(data).forEach(function(ghIssue) {
+  data.forEach(function(ghIssue) {
+    issueStore.push(ghIssue);
     issues.push(createIssueSummary(ghIssue));
   });
 });
@@ -39,6 +41,8 @@ app.use('/profilepics', express.static('images'));
 // Parsing the body and handling POST/PUT/DELETE requests
 // In order to parse the body of a POST/PUT message we need to insall the body-parser package
 // and setup express to use it
+// We tell bodyParser that our data is going to be urlencoded and with extended: true we are
+// setting it up to parse as much of the body as it can
 app.use(bodyParser.urlencoded({ extended: true }));
 
 // With views defined and a template engine selected we can now render the views from the routes
@@ -86,9 +90,55 @@ app.get('/issues/:id', function(req, res) {
   res.render('issue', issue);
 });
 
+// After setting up bodyParser we can configure the POST/PUT routes to handle the
+// data and make the required changes
+app.put('/issues/:id', function(req, res) {
+  var id = req.params.id;
+  var issue = findIssueById(id);
+  
+  issue.updated_at = Date.now();
+  issue.state = req.body.state;
+  issue.user.login = req.body.user; 
+  
+  saveIssueData(issue, function(err) {
+    if (err) console.log("Error! Data could not be saved. ", err);
+    res.end();
+  });
+});
+
+app.delete('/issues/:id', function(req, res) {
+  var id = req.params.id;
+  deleteIssue(id, function(err) {
+    if (err) console.log("Error! Data could not be saved. ", err);
+    res.end();
+  });
+});
+
 app.get('/yo', function(req, res) {
   res.send("YO!");
 });
+
+var findIssueById = function(id) {
+  return _.find(issueStore, {number: +id});  
+};
+var findIssueIndex = function(issue) {
+  return _.findIndex(issueStore, issue);
+};
+
+var saveIssueData = function(issue, cb) {
+  var issueIndex = findIssueIndex(issue); 
+  issueStore[issueIndex] = issue;
+  writeData(issueStore, cb);
+};
+var deleteIssue = function(id, cb) {
+  _.remove(issueStore, {number: +id});
+  writeData(issueStore, cb);
+};
+
+var writeData = function (issueStore, cb) {
+  var dataStore = 'issues.json';
+  jsonfile.writeFile(dataStore, issueStore, cb); 
+}; 
 
 var server = app.listen(3000, function() {
   console.log("Server running at http://localhost:" + server.address().port);

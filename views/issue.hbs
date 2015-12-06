@@ -68,7 +68,7 @@
         $.ajax('/issues/'+{{id}}, {
           method: 'DELETE',
           complete: function() {
-            location: '/' 
+            window.location.href = '/'; 
           }
         });
       }
