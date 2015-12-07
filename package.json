@@ -10,13 +10,15 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "JSONStream": "^1.0.7",
     "body-parser": "^1.14.1",
     "consolidate": "^0.13.1",
     "express": "^4.13.3",
     "handlebars": "^4.0.5",
     "jade": "^1.11.0",
     "jsonfile": "^2.2.3",
-    "lodash": "^3.10.1"
+    "lodash": "^3.10.1",
+    "mongodb": "^2.1.0"
   },
   "devDependencies": {
     "nodemon": "^1.8.1"
