@@ -12,6 +12,8 @@ var router = express.Router({
 var helpers = require('./helpers');
 var _ = require('lodash');
 
+var Issue = require('./db.js').Issue;
+
 // Much like the router/app.all method, we can declare the .use method
 // - like we do when we include middleware - to be processed each time a request is made
 // indifferent of the VERB used. The difference between use and all is that use does not
@@ -76,15 +78,17 @@ router.get('/:id', helpers.verifyIssueId, function(req, res) {
 // data and make the required changes
 router.put('/:id', function(req, res) {
   var id = req.params.id;
-  var issue = helpers.findIssueById(id);
-  
-  issue.updated_at = Date.now();
-  issue.state = req.body.state;
-  issue.user.login = req.body.user; 
-  
-  helpers.saveIssueData(issue, function(err) {
-    if (err) console.log("Error! Data could not be saved. ", err);
-    res.end();
+  helpers.findIssueById(id, function(err, issue) {
+    if (err) throw err;
+
+    issue.updated_at = Date.now();
+    issue.state = req.body.state;
+    issue.user.login = req.body.user; 
+    
+    helpers.saveIssueData(issue, function(err) {
+      if (err) console.log("Error! Data could not be saved. ", err);
+      res.end();
+    });
   });
 });
 

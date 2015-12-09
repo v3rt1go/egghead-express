@@ -7,6 +7,9 @@ var fs = require('fs');
 var JSONStream = require('JSONStream');
 var helpers = require('./helpers');
 
+// Import Issue mongoose model
+var Issue = require('./db.js').Issue;
+
 var app = express();
 
 // using consolidate we can work with different template engines, including ones that do not
@@ -37,10 +40,14 @@ app.use('/profilepics', express.static('images'));
 app.use(bodyParser.urlencoded({ extended: true }));
 
 app.get('/', function(req, res) {
+  Issue.find({}, function(err, issues) {
+    res.send(issues);
+  });
+
   // Express has made the response object implement the writable stream object. That means that
   // we can pipe data directly into it:
-  var readable = fs.createReadStream('./issues.json');
-  readable.pipe(res);
+  //var readable = fs.createReadStream('./issues.json');
+  //readable.pipe(res);
 
   //var buffer = '';
 

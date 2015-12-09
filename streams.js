@@ -1,5 +1,6 @@
 'use strict';
 var fs = require('fs');
+var JSONStream = require('JSONStream');
 
 // Much of the node functionality and the way it works is powered by streams
 var inputFile = './issues.json';
@@ -15,7 +16,11 @@ var writeStream = fs.createWriteStream(outputFile);
 // together to prepare the data. This is how gulp works
 
 // This will copy the data streaming it from the readStream to the writeStream
-readStream.pipe(writeStream);
+//readStream.pipe(writeStream);
 
-// TODO: Write a script that uses JSONStream.stringifyObject to create a file that will
+// DONE: Write a script that uses JSONStream.stringifyObject to create a file that will
 // have the issues.json objects each on one line, separated by , for mongoimport
+readStream
+  .pipe(JSONStream.parse('*'))
+  .pipe(JSONStream.stringify('', '\n', ''))
+  .pipe(writeStream);

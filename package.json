@@ -18,7 +18,8 @@
     "jade": "^1.11.0",
     "jsonfile": "^2.2.3",
     "lodash": "^3.10.1",
-    "mongodb": "^2.1.0"
+    "mongodb": "^2.1.0",
+    "mongoose": "^4.2.9"
   },
   "devDependencies": {
     "nodemon": "^1.8.1"
